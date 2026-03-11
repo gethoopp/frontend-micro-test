@@ -41,7 +41,7 @@ const config = getDefaultConfig({
   },
 });
 
-//tes deploy
+//tes deplo
 
 export function Providers({ children }: { children: React.ReactNode }) {
   const [isReady] = useState(true);
