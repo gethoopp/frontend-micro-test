@@ -12,7 +12,7 @@ import "@rainbow-me/rainbowkit/styles.css";
 
 const Providers = dynamic(
   () => import("@/components/Providers").then((mod) => mod.Providers),
-  { ssr: false }
+  { ssr: false },
 );
 
 export default function Home() {
@@ -35,7 +35,7 @@ function HomeContent() {
         <div className="logo">
           <span className="logo-icon">₿</span>
           <span className="logo-text">
-            MEZO<span className="logo-accent">PASSPORT</span>
+            Micro<span className="logo-accent">Pay</span>
           </span>
         </div>
         <div className="connect-wrapper">
@@ -68,7 +68,16 @@ function HomeContent() {
       </section>
 
       {isConnected && (
-        <div style={{ display: "flex", gap: "24px", width: "100%", maxWidth: "1100px", position: "relative", zIndex: 10 }}>
+        <div
+          style={{
+            display: "flex",
+            gap: "24px",
+            width: "100%",
+            maxWidth: "1100px",
+            position: "relative",
+            zIndex: 10,
+          }}
+        >
           <section className="dashboard" style={{ flex: 1 }}>
             <WalletInfo />
             <SendPayment />
