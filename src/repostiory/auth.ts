@@ -11,16 +11,19 @@ interface LoginResponse {
 
 export async function login(params: LoginParams): Promise<LoginResponse> {
   try {
-    const response = await fetch("http://localhost:8000/api/v1/auth/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
+    const response = await fetch(
+      "https://micro-payment-backend.onrender.com/api/v1/auth/login",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          address: params.walletAddress,
+          private_key: params.privateKey,
+        }),
       },
-      body: JSON.stringify({
-        address: params.walletAddress,
-        private_key: params.privateKey,
-      }),
-    });
+    );
 
     const data = await response.json();
 

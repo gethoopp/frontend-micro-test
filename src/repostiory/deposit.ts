@@ -18,13 +18,14 @@ interface DepositEstimateResponse {
 }
 
 export async function getDepositEstimate(
-  params: DepositEstimateParams
+  params: DepositEstimateParams,
 ): Promise<DepositEstimateResponse> {
-  const token = typeof window !== "undefined" ? localStorage.getItem("authToken") : null;
+  const token =
+    typeof window !== "undefined" ? localStorage.getItem("authToken") : null;
 
   try {
     const response = await fetch(
-      "http://localhost:8000/api/v1/payment/deposit-estimate",
+      "https://micro-payment-backend.onrender.com/api/v1/payment/deposit-estimate",
       {
         method: "POST",
         headers: {
@@ -34,7 +35,7 @@ export async function getDepositEstimate(
         body: JSON.stringify({
           amount: params.amount,
         }),
-      }
+      },
     );
 
     const data = await response.json();
@@ -77,7 +78,8 @@ interface DepositResponse {
 }
 
 export async function deposit(params: DepositParams): Promise<DepositResponse> {
-  const token = typeof window !== "undefined" ? localStorage.getItem("authToken") : null;
+  const token =
+    typeof window !== "undefined" ? localStorage.getItem("authToken") : null;
 
   try {
     const response = await fetch(
@@ -91,7 +93,7 @@ export async function deposit(params: DepositParams): Promise<DepositResponse> {
         body: JSON.stringify({
           amount: params.amount,
         }),
-      }
+      },
     );
 
     const data = await response.json();
