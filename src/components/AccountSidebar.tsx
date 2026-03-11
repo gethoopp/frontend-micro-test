@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useAccount } from "wagmi";
+import { getBalance } from "@/repostiory/balance";
 
 export function AccountSidebar() {
   const { address, isConnected } = useAccount();
@@ -10,6 +11,23 @@ export function AccountSidebar() {
   const [error, setError] = useState("");
 
   if (!isConnected) return null;
+
+  const handleCheckBalance = async () => {
+    if (!address) return;
+
+    setIsLoading(true);
+    setError("");
+
+    const result = await getBalance({ address });
+
+    if (result.success) {
+      setBalance(result.walletBalance || "0");
+    } else {
+      setError(result.message || "Failed to fetch balance");
+    }
+
+    setIsLoading(false);
+  };
 
   return (
     <aside className="sidebar">
@@ -29,7 +47,7 @@ export function AccountSidebar() {
 
       <button
         className="sidebar-btn"
-        onClick={checkBalance}
+        onClick={handleCheckBalance}
         disabled={isLoading}
       >
         {isLoading ? "Checking..." : "Check Balance"}
