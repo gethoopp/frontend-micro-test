@@ -5,6 +5,9 @@ import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { useAccount } from "wagmi";
 import { WalletInfo } from "@/components/WalletInfo";
 import { SignMessage } from "@/components/SignMessage";
+import { SendPayment } from "@/components/SendPayment";
+import { AccountSidebar } from "@/components/AccountSidebar";
+import { Deposit } from "@/components/Deposit";
 import "@rainbow-me/rainbowkit/styles.css";
 
 const Providers = dynamic(
@@ -65,10 +68,15 @@ function HomeContent() {
       </section>
 
       {isConnected && (
-        <section className="dashboard">
-          <WalletInfo />
-          <SignMessage />
-        </section>
+        <div style={{ display: "flex", gap: "24px", width: "100%", maxWidth: "1100px", position: "relative", zIndex: 10 }}>
+          <section className="dashboard" style={{ flex: 1 }}>
+            <WalletInfo />
+            <SendPayment />
+            <Deposit />
+            <SignMessage />
+          </section>
+          <AccountSidebar />
+        </div>
       )}
 
       {!isConnected && (
