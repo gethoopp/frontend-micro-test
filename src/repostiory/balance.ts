@@ -11,19 +11,22 @@ interface BalanceResponse {
   message?: string;
 }
 
-export async function getBalance(params: BalanceParams): Promise<BalanceResponse> {
-  const token = typeof window !== "undefined" ? localStorage.getItem("authToken") : null;
+export async function getBalance(
+  params: BalanceParams,
+): Promise<BalanceResponse> {
+  const token =
+    typeof window !== "undefined" ? localStorage.getItem("authToken") : null;
 
   try {
     const response = await fetch(
-      `http://localhost:8000/api/v1/payment/balance?address=${params.address}`,
+      `https://micro-payment-backend.onrender.com/api/v1/payment/balance?address=${params.address}`,
       {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
           ...(token ? { Authorization: `Bearer ${token}` } : {}),
         },
-      }
+      },
     );
 
     const data = await response.json();
