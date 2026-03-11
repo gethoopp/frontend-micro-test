@@ -100,7 +100,9 @@ export function SendPayment() {
     return (
       <div className="sign-card">
         <h3 className="card-title">Send Payment</h3>
-        <div className="error-text">Please connect your wallet to send payments</div>
+        <div className="error-text">
+          Please connect your wallet to send payments
+        </div>
       </div>
     );
   }
@@ -109,7 +111,7 @@ export function SendPayment() {
     return (
       <div className="sign-card">
         <h3 className="card-title">Send Payment</h3>
-        
+
         <div className="input-group">
           <label className="input-label">Wallet Address</label>
           <input
@@ -147,8 +149,17 @@ export function SendPayment() {
 
   return (
     <div className="sign-card">
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "16px" }}>
-        <h3 className="card-title" style={{ margin: 0 }}>Send Payment</h3>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          marginBottom: "16px",
+        }}
+      >
+        <h3 className="card-title" style={{ margin: 0 }}>
+          Send Payment
+        </h3>
         <button
           onClick={handleLogout}
           style={{
@@ -164,7 +175,7 @@ export function SendPayment() {
           Logout
         </button>
       </div>
-      
+
       <div className="input-group">
         <label className="input-label">Recipient Address</label>
         <input
@@ -186,7 +197,13 @@ export function SendPayment() {
           onChange={(e) => setAmount(e.target.value)}
         />
         {amount && (
-          <span style={{ fontSize: "0.75rem", color: "var(--text-muted)", fontFamily: "var(--font-mono)" }}>
+          <span
+            style={{
+              fontSize: "0.75rem",
+              color: "var(--text-muted)",
+              fontFamily: "var(--font-mono)",
+            }}
+          >
             = {toWei(amount)} wei
           </span>
         )}
