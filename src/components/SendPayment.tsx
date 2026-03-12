@@ -3,46 +3,21 @@
 import { useState, useEffect } from "react";
 import { useAccount } from "wagmi";
 import { sendPayment } from "@/repostiory/sendPayment";
-import { login, logout, getAuthToken } from "@/repostiory/auth";
+import { logout, getAuthToken } from "@/repostiory/auth";
 
 export function SendPayment() {
-  const { isConnected } = useAccount();
+  const { address, isConnected } = useAccount();
   const [to, setTo] = useState("");
   const [amount, setAmount] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
   const [txHash, setTxHash] = useState("");
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [walletAddress, setWalletAddress] = useState("");
-  const [privateKey, setPrivateKey] = useState("");
-  const [isLoggingIn, setIsLoggingIn] = useState(false);
 
   useEffect(() => {
     const token = getAuthToken();
     setIsLoggedIn(!!token);
   }, []);
-
-  const handleLogin = async () => {
-    if (!walletAddress || !privateKey) {
-      setError("Please enter wallet address and private key");
-      return;
-    }
-
-    setIsLoggingIn(true);
-    setError("");
-
-    const result = await login({ walletAddress, privateKey });
-
-    if (result.success) {
-      setIsLoggedIn(true);
-      setWalletAddress("");
-      setPrivateKey("");
-    } else {
-      setError(result.message || "Login failed");
-    }
-
-    setIsLoggingIn(false);
-  };
 
   const handleLogout = () => {
     logout();
@@ -57,7 +32,7 @@ export function SendPayment() {
   };
 
   const handleSend = async () => {
-    if (!isConnected) {
+    if (!isConnected || !address) {
       setError("Please connect your wallet first");
       return;
     }
@@ -107,46 +82,6 @@ export function SendPayment() {
     );
   }
 
-  if (!isLoggedIn) {
-    return (
-      <div className="sign-card">
-        <h3 className="card-title">Send Payment</h3>
-
-        <div className="input-group">
-          <label className="input-label">Wallet Address</label>
-          <input
-            type="text"
-            className="text-input"
-            placeholder="0x..."
-            value={walletAddress}
-            onChange={(e) => setWalletAddress(e.target.value)}
-          />
-        </div>
-
-        <div className="input-group">
-          <label className="input-label">Private Key</label>
-          <input
-            type="password"
-            className="text-input"
-            placeholder="Private Key"
-            value={privateKey}
-            onChange={(e) => setPrivateKey(e.target.value)}
-          />
-        </div>
-
-        <button
-          className="action-btn"
-          onClick={handleLogin}
-          disabled={isLoggingIn}
-        >
-          {isLoggingIn ? "Logging in..." : "Login"}
-        </button>
-
-        {error && <div className="error-text">{error}</div>}
-      </div>
-    );
-  }
-
   return (
     <div className="sign-card">
       <div
@@ -160,21 +95,29 @@ export function SendPayment() {
         <h3 className="card-title" style={{ margin: 0 }}>
           Send Payment
         </h3>
-        <button
-          onClick={handleLogout}
-          style={{
-            background: "transparent",
-            border: "1px solid var(--border)",
-            color: "var(--text-secondary)",
-            padding: "4px 12px",
-            borderRadius: "var(--radius-sm)",
-            fontSize: "0.75rem",
-            cursor: "pointer",
-          }}
-        >
-          Logout
-        </button>
+        {isLoggedIn && (
+          <button
+            onClick={handleLogout}
+            style={{
+              background: "transparent",
+              border: "1px solid var(--border)",
+              color: "var(--text-secondary)",
+              padding: "4px 12px",
+              borderRadius: "var(--radius-sm)",
+              fontSize: "0.75rem",
+              cursor: "pointer",
+            }}
+          >
+            Logout
+          </button>
+        )}
       </div>
+
+      {!isLoggedIn && (
+        <div className="error-text" style={{ marginBottom: "16px" }}>
+          Please sign the message to login (auto-triggered on connect)
+        </div>
+      )}
 
       <div className="input-group">
         <label className="input-label">Recipient Address</label>
@@ -212,7 +155,7 @@ export function SendPayment() {
       <button
         className="action-btn"
         onClick={handleSend}
-        disabled={isLoading || !isConnected}
+        disabled={isLoading || !isConnected || !isLoggedIn}
       >
         {isLoading ? "Sending..." : "Send Payment"}
       </button>

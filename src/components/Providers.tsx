@@ -24,11 +24,11 @@ const mezoMainnet = {
 
 const mezoTestnet = {
   ...mainnet,
-  id: 408193,
+  id: 31611,
   name: "Mezo Testnet",
-  nativeCurrency: { name: "Bitcoin", symbol: "tBTC", decimals: 8 },
+  nativeCurrency: { name: "Bitcoin", symbol: "BTC", decimals: 18 },
   rpcUrls: {
-    default: { http: ["https://rpc.testnet.mezo.org"] },
+    default: { http: ["https://rpc.test.mezo.org"] },
   },
 } as const;
 

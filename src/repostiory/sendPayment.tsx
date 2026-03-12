@@ -29,7 +29,7 @@ export async function sendPayment(
 
   try {
     const response = await fetch(
-      "http://localhost:8000/api/v1/payment/send-direct",
+      `/api/proxy?path=/api/v1/payment/send-direct`,
       {
         method: "POST",
         headers: {

@@ -1,6 +1,7 @@
 interface LoginParams {
-  walletAddress: string;
-  privateKey: string;
+  address: string;
+  signature: string;
+  nonce: string;
 }
 
 interface LoginResponse {
@@ -9,25 +10,68 @@ interface LoginResponse {
   message?: string;
 }
 
-export async function login(params: LoginParams): Promise<LoginResponse> {
+interface NonceResponse {
+  success: boolean;
+  nonce?: string;
+  message?: string;
+}
+
+export async function getNonce(address: string): Promise<NonceResponse> {
   try {
     const response = await fetch(
-      "https://micro-payment-backend.onrender.com/api/v1/auth/login",
+      `/api/proxy?path=/api/v1/auth/nonce?address=${encodeURIComponent(address)}`
+    );
+
+    const data = await response.json();
+
+    if (response.ok) {
+      return {
+        success: true,
+        nonce: data.nonce,
+      };
+    }
+
+    return {
+      success: false,
+      message: data.message || "Failed to get nonce",
+    };
+  } catch (error) {
+    console.error("Get nonce error:", error);
+    return {
+      success: false,
+      message: "Failed to connect to server",
+    };
+  }
+}
+
+export async function login(params: LoginParams): Promise<LoginResponse> {
+  try {
+    console.log("Login request:", {
+      address: params.address,
+      signature: params.signature,
+      nonce: params.nonce,
+    });
+
+    const response = await fetch(
+      `/api/proxy?path=/api/v1/auth/login`,
       {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          address: params.walletAddress,
-          private_key: params.privateKey,
+          address: params.address,
+          signature: params.signature,
+          nonce: params.nonce,
         }),
       },
     );
 
     const data = await response.json();
+    console.log("Login response:", response.status, data);
 
     if (response.ok && data.token) {
+      console.log("Login success, storing token:", data.token.substring(0, 20) + "...");
       localStorage.setItem("authToken", data.token);
       return {
         success: true,
