@@ -1,21 +1,10 @@
-interface DepositEstimateParams {
-  amount: string;
-}
+import {
+  DepositEstimateParams,
+  DepositEstimateResponse,
+  DepositParams,
+  DepositResponse,
+} from "@/models/deposit";
 
-interface GasEstimate {
-  gasLimit: number;
-  gasPrice: string;
-  gasFee: string;
-}
-
-interface DepositEstimateResponse {
-  success: boolean;
-  amount?: string;
-  balanceBefore?: string;
-  balanceAfter?: string;
-  gasEstimate?: GasEstimate;
-  message?: string;
-}
 //test
 export async function getDepositEstimate(
   params: DepositEstimateParams,
@@ -25,7 +14,7 @@ export async function getDepositEstimate(
 
   try {
     const response = await fetch(
-      "https://micro-payment-backend.onrender.com/api/v1/payment/deposit-estimate",
+      `/api/proxy?path=/api/v1/payment/deposit-estimate`,
       {
         method: "POST",
         headers: {
@@ -67,23 +56,13 @@ export async function getDepositEstimate(
   }
 }
 
-interface DepositParams {
-  amount: string;
-}
-
-interface DepositResponse {
-  success: boolean;
-  txHash?: string;
-  message?: string;
-}
-
 export async function deposit(params: DepositParams): Promise<DepositResponse> {
   const token =
     typeof window !== "undefined" ? localStorage.getItem("authToken") : null;
 
   try {
     const response = await fetch(
-      "http://localhost:8000/api/v1/payment/deposit",
+      `/api/proxy?path=/api/v1/payment/deposit`,
       {
         method: "POST",
         headers: {

@@ -6,9 +6,11 @@ import { useAccount } from "wagmi";
 import { WalletInfo } from "@/components/WalletInfo";
 import { SignMessage } from "@/components/SignMessage";
 import { SendPayment } from "@/components/SendPayment";
-import { AccountSidebar } from "@/components/AccountSidebar";
 import { Deposit } from "@/components/Deposit";
+import { AccountSidebar } from "@/components/AccountSidebar";
+import { AuthHandler } from "@/components/AuthHandler";
 import "@rainbow-me/rainbowkit/styles.css";
+import "@/lib/navBar.css";
 
 const Providers = dynamic(
   () => import("@/components/Providers").then((mod) => mod.Providers),
@@ -18,7 +20,9 @@ const Providers = dynamic(
 export default function Home() {
   return (
     <Providers>
-      <HomeContent />
+      <AuthHandler>
+        <HomeContent />
+      </AuthHandler>
     </Providers>
   );
 }
@@ -27,25 +31,41 @@ function HomeContent() {
   const { isConnected } = useAccount();
 
   return (
-    <main className="main">
+    <main>
+      <nav className="nav">
+        <div className="navLeft">
+          <div className="logoWrap">
+            <span className="logoIcon">₿</span>
+            <span className="logoText">
+              Web3<span className="logoAccent">Learn</span>
+            </span>
+          </div>
+          {["Courses", "Library", "Community", "Wallet"].map((n) => (
+            <a key={n} className="navLink">
+              {n}
+            </a>
+          ))}
+        </div>
+        <div className="navRight">
+          <div className="searchBox">
+            <span style={{ opacity: 0.45, fontSize: 13 }}>🔍</span>
+            <span style={{ opacity: 0.35, fontSize: 13 }}>Search courses…</span>
+          </div>
+          <button className="iconBtn" title="Notifications">
+            <span style={{ fontSize: 16 }}>🔔</span>
+          </button>
+          <div className="connectWrap">
+            <ConnectButton
+              showBalance={false}
+              chainStatus="icon"
+              accountStatus="address"
+            />
+          </div>
+        </div>
+      </nav>
+
       <div className="bg-grid" />
       <div className="bg-glow" />
-
-      <header className="header">
-        <div className="logo">
-          <span className="logo-icon">₿</span>
-          <span className="logo-text">
-            Micro<span className="logo-accent">Pay</span>
-          </span>
-        </div>
-        <div className="connect-wrapper">
-          <ConnectButton
-            showBalance={false}
-            chainStatus="icon"
-            accountStatus="address"
-          />
-        </div>
-      </header>
 
       <section className="hero">
         <div className="hero-badge">BITCOIN-NATIVE dAPP</div>

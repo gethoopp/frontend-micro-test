@@ -17,9 +17,11 @@ export async function getBalance(
   const token =
     typeof window !== "undefined" ? localStorage.getItem("authToken") : null;
 
+  console.log("getBalance - token:", token ? token.substring(0, 20) + "..." : "null");
+
   try {
     const response = await fetch(
-      `https://micro-payment-backend.onrender.com/api/v1/payment/balance?address=${params.address}`,
+      `/api/proxy?path=/api/v1/payment/balance?address=${encodeURIComponent(params.address)}`,
       {
         method: "GET",
         headers: {
